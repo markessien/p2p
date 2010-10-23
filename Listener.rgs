@@ -1,0 +1,34 @@
+HKCR
+{
+	P2P.Listener.1 = s 'Listener Class'
+	{
+		CLSID = s '{DEBCADA9-0AA6-44EE-9D6F-46A96388DDDE}'
+	}
+	P2P.Listener = s 'Listener Class'
+	{
+		CLSID = s '{DEBCADA9-0AA6-44EE-9D6F-46A96388DDDE}'
+		CurVer = s 'P2P.Listener.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DEBCADA9-0AA6-44EE-9D6F-46A96388DDDE} = s 'Listener Class'
+		{
+			ProgID = s 'P2P.Listener.1'
+			VersionIndependentProgID = s 'P2P.Listener'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 112'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '132497'
+			}
+			'TypeLib' = s '{38E1207E-A822-4AB2-9000-3DB64ED771BB}'
+			'Version' = s '1.0'
+		}
+	}
+}

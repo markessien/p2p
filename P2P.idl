@@ -1,0 +1,358 @@
+// P2P.idl : IDL source for P2P.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (P2P.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+#include "olectl.h"
+	
+[
+	uuid(38E1207E-A822-4AB2-9000-3DB64ED771BB),
+	version(1.0),
+	helpstring("P2P 1.0 Type Library")
+]
+library P2PLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	
+	typedef enum
+	{
+		socketConnected = 0,
+		socketDisconnected
+	} EnumSocketState;
+	
+	typedef enum
+	{
+		err_NoError = 0,
+		err_GenericError,
+		err_WSAStartupFailed,
+		err_WSAStartupNotCalled,
+		err_SocketCreationFailed,
+		err_WSAAsyncSelectFailed,
+		err_HostNameCouldNotBeResolved,
+		err_CouldNotConnect,
+		err_ConnectionError,
+		err_InvalidDataReceived,
+		err_ConnectionLost,
+		err_CouldNotOpenFile,
+		err_SocketBindFailed,
+		err_SocketListenFailed
+	} EnumErrorState;
+		
+	typedef enum
+	{
+		sm_NothingDone = 0,
+		sm_LoadingLocalFiles,
+		sm_stateLoadingRemoteFiles,
+		sm_Sorting,
+		sm_Ready
+	} ServerManagerState;
+	
+	typedef enum
+	{
+		type_Unknown = 0,
+		type_UploadTransfer,
+		type_DownloadTransfer,
+		type_AltUploadTransfer,
+		type_AltDownloadTransfer
+	} EnumTransferType;
+	
+	typedef enum
+	{
+		trans_ContactingServer = 0,
+		trans_Connecting,
+		trans_Negotiating,
+		trans_TransferringByteStream,
+		trans_TransferComplete,
+		trans_RemotelyQueued,
+		trans_Error,
+		trans_Aborted
+	} EnumTransferState;
+
+	[
+		object,
+		uuid(CE753841-3480-4160-AF11-E387178C888D),
+		dual,
+		helpstring("INapsterServer Interface"),
+		pointer_default(unique)
+	]
+	interface INapsterServer : IDispatch
+	{
+		[id(1), helpstring("method AppInitialize")] HRESULT AppInitialize([out, retval] VARIANT_BOOL *pResult);
+		[id(2), helpstring("method ConnectToServer")] HRESULT ConnectToServer([in] BSTR bstrAddress, [in] long nPort, [out, retval] VARIANT_BOOL *pResult);
+		[id(3), helpstring("method SendData")] HRESULT SendData([in] long nCmd, [in] BSTR strData);
+		[id(4), helpstring("method Disconnect")] HRESULT Disconnect();
+		[id(5), helpstring("method AppUninitialize")] HRESULT AppUninitialize();
+		[propget, id(6), helpstring("property CurrentData")] HRESULT CurrentData([out, retval] BSTR *pVal);
+		[propget, id(7), helpstring("property CurrentCmd")] HRESULT CurrentCmd([out, retval] long *pVal);
+		[propget, id(8), helpstring("property SocketState")] HRESULT SocketState([out, retval] EnumSocketState *pVal);
+		[propget, id(9), helpstring("property ErrorState")] HRESULT ErrorState([out, retval] EnumErrorState *pVal);
+	};
+
+	[
+		uuid(4577E40B-69C1-457F-A4D8-3C894BA6DEFE),
+		helpstring("_INapsterServerEvents Interface")
+	]
+	dispinterface _INapsterServerEvents
+	{
+		properties:
+		methods:
+			[id(1), helpstring("method OnError")] HRESULT OnError([in] BSTR bstrDescription);
+			[id(2), helpstring("method OnConnected")] HRESULT OnConnected();
+			[id(3), helpstring("method OnDataReceived")] HRESULT OnDataReceived();
+			[id(4), helpstring("method OnRemoteServerClosedConnection")] HRESULT OnRemoteServerClosedConnection();
+			[id(5), helpstring("method OnDisconnected")] HRESULT OnDisconnected();
+		[id(6), helpstring("method FatalError")] HRESULT FatalError([in] BSTR Message);
+	};
+	
+
+	[
+		object,
+		uuid(C4FEA914-3519-4C5B-B41E-6896F1907C30),
+		dual,
+		helpstring("IServerManager Interface"),
+		pointer_default(unique)
+	]
+	interface IServerManager : IDispatch
+	{
+		[id(1), helpstring("method AppInitialize")] HRESULT AppInitialize();
+		[id(2), helpstring("method AppUninitialize")] HRESULT AppUninitialize();
+		[id(3), helpstring("method LoadLocalServerList")] HRESULT LoadLocalServerList([out, retval] VARIANT_BOOL * pbResult);
+		[id(4), helpstring("method LoadRemoteServerList")] HRESULT LoadRemoteServerList([out, retval] VARIANT_BOOL * pbResult);
+		[id(5), helpstring("method AddPermanentServer")] HRESULT AddPermanentServer([in] BSTR Description, [in] BSTR Address, [in] long nPort, [out, retval] VARIANT_BOOL * pbResult);
+		[id(7), helpstring("method GetNextServer")] HRESULT GetNextServer([out] BSTR * Description, [out] BSTR * Address, [out] long * nPort, [out] VARIANT_BOOL * bIsPermanent, [out, retval] VARIANT_BOOL * pResult);
+		[id(8), helpstring("method SetFileSavePath")] HRESULT SetFileSavePath([in] BSTR sPath);
+		[id(9), helpstring("method GetServer")] HRESULT GetServer([in] int Index, [out] BSTR * Description, [out] BSTR * Address, [out] long * nPort, [out] long * nUsers,[out] long * nGigas,[out] long * nFiles, [out] VARIANT_BOOL * bIsPermanent, [out, retval] VARIANT_BOOL * pResult);
+		[id(10), helpstring("method GetServerCount")] HRESULT GetServerCount([out, retval] long * plResult);
+		[id(11), helpstring("method LoadAllServerLists")] HRESULT LoadAllServerLists();
+		[id(12), helpstring("method SortLists")] HRESULT SortLists();
+		[propget, id(13), helpstring("property State")] HRESULT State([out, retval] ServerManagerState *pVal);
+		[id(14), helpstring("method SaveLocalFilesToDisk")] HRESULT SaveLocalFilesToDisk();
+		[id(15), helpstring("method ResetStatusOfAllServers")] HRESULT ResetStatusOfAllServers();
+		[id(16), helpstring("method FindServer")] HRESULT FindServer([in] BSTR ServerName, [in] VARIANT_BOOL IsPermanent);
+	};
+
+	[
+		uuid(0A85DEF3-41C5-467E-9CB1-8049FEA88571),
+		helpstring("NapsterServer Class")
+	]
+	coclass NapsterServer
+	{
+		[default] interface INapsterServer;
+		[default, source] dispinterface _INapsterServerEvents;
+	};
+	[
+		uuid(02EE1A23-ECBF-43B1-BDA1-E62EE413FA24),
+		helpstring("_IServerManagerEvents Interface")
+	]
+	dispinterface _IServerManagerEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method OnServerAdded")] HRESULT OnServerAdded([in] int Index, [in] VARIANT_BOOL bPermanent);
+		[id(3), helpstring("method OnRemoteServersLoaded")] HRESULT OnRemoteServersLoaded([in] VARIANT_BOOL CacheUsed);
+		[id(4), helpstring("method OnPermanentServersLoaded")] HRESULT OnPermanentServersLoaded();
+		[id(5), helpstring("method FatalError")] HRESULT FatalError([in] BSTR Message);
+	};
+	
+
+	[
+		uuid(72076840-292C-40AD-B194-EC75DB11981C),
+		helpstring("ServerManager Class")
+	]
+	coclass ServerManager
+	{
+		[default] interface IServerManager;
+		[default, source] dispinterface _IServerManagerEvents;
+	};
+
+	[
+		object,
+		uuid(E37FD987-8475-43D7-A30F-48520AE5C375),
+		dual,
+		helpstring("ISharedFolderManager Interface"),
+		pointer_default(unique)
+	]
+	interface ISharedFolderManager : IDispatch
+	{
+		[id(1), helpstring("method AddSharedFolder")] HRESULT AddSharedFolder([in] BSTR Path, [out, retval] VARIANT_BOOL * pVal);
+		[propget, id(2), helpstring("property SharedFolderCount")] HRESULT SharedFolderCount([out, retval] int *pVal);
+		[propget, id(3), helpstring("property SharedFolder")] HRESULT SharedFolder([in] int Index, [out, retval] BSTR *pVal);
+		[id(4), helpstring("method AsyncWeedDeadFiles")] HRESULT AsyncWeedDeadFiles();
+		[id(5), helpstring("method GetSharedFileListPath")] HRESULT GetSharedFileListPath([out] BSTR * Path, [out, retval] VARIANT_BOOL * pResult);
+		[id(6), helpstring("method Load")] HRESULT Load();
+		[id(7), helpstring("method Save")] HRESULT Save();
+		[propget, id(8), helpstring("property FilePath")] HRESULT FilePath([out, retval] BSTR *pVal);
+		[propput, id(8), helpstring("property FilePath")] HRESULT FilePath([in] BSTR newVal);
+		[id(9), helpstring("method RemoveFolder")] HRESULT RemoveFolder([in] BSTR Path);
+	};
+
+	[
+		uuid(0CF5F273-7A25-4690-AC0F-1F92EA660839),
+		helpstring("_ISharedFolderManagerEvents Interface")
+	]
+	dispinterface _ISharedFolderManagerEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method OnFileAdded")] HRESULT OnFileAdded([in] BSTR FilePath);
+		[id(2), helpstring("method OnFileRemoved")] HRESULT OnFileRemoved([in] BSTR FilePath);
+		[id(3), helpstring("method OnFolderRemoved")] HRESULT OnFolderRemoved([in] BSTR Path);
+		[id(4), helpstring("method FatalError")] HRESULT FatalError([in] BSTR Message);
+	};
+	
+
+		
+
+	[
+		uuid(0F532EFF-2D22-4C4C-8CB6-FF9AE2D7BCE2),
+		helpstring("SharedFolderManager Class")
+	]
+	coclass SharedFolderManager
+	{
+		[default] interface ISharedFolderManager;
+		[default, source] dispinterface _ISharedFolderManagerEvents;
+	};
+
+
+	[
+		object,
+		uuid(F2E8509A-8804-4608-8721-D0B9879717D7),
+		dual,
+		helpstring("IListener Interface"),
+		pointer_default(unique)
+	]
+	interface IListener : IDispatch
+	{
+		[id(1), helpstring("method Listen")] HRESULT Listen([in] long nPort);
+		[id(2), helpstring("method StopListenAndTerminate")] HRESULT StopListenAndTerminate();
+		[id(3), helpstring("method OneRingToBindThemAll")] HRESULT OneRingToBindThemAll([in] BSTR Ring);
+		[id(4), helpstring("method ConvertNumericIP")] HRESULT ConvertNumericIP([in] double nAddr, [out, retval] BSTR * pResult);
+	};
+
+	[
+		uuid(FD089BEA-F099-49C7-A2CB-669A85EEC98B),
+		helpstring("_IListenerEvents Interface")
+	]
+	dispinterface _IListenerEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method OnConnection")] HRESULT OnConnection([in] BSTR RemoteAddress, [in] long RemotePort, [in] long ConnectionSocket);
+		[id(2), helpstring("method OnError")] HRESULT OnError([in] BSTR ErrorMsg);
+		[id(3), helpstring("method FatalError")] HRESULT FatalError([in] BSTR Message);
+	};
+	
+
+	[
+		object,
+		uuid(C4045426-DEA5-4187-AFCC-83D415AC54F3),
+		dual,
+		helpstring("ITransfer Interface"),
+		pointer_default(unique)
+	]
+	interface ITransfer : IDispatch
+	{
+		[id(1), helpstring("method CancelTransfer")] HRESULT CancelTransfer();
+		[id(2), helpstring("method DownloadFile")] HRESULT DownloadFile([in] BSTR Address, [in] long nPort, [in] BSTR MyNick, [in] BSTR RemoteFilename, [in] BSTR LocalFilename, [in] long FileSize);
+		[propget, id(3), helpstring("property BytesTranferred")] HRESULT BytesTranferred([out, retval] double *pVal);
+		[propget, id(4), helpstring("property IsRemotelyQueued")] HRESULT IsRemotelyQueued([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(4), helpstring("property IsRemotelyQueued")] HRESULT IsRemotelyQueued([in] VARIANT_BOOL newVal);
+		[propget, id(5), helpstring("property ProgressPercent")] HRESULT ProgressPercent([out, retval] int *pVal);
+		[propget, id(6), helpstring("property Speed")] HRESULT Speed([out, retval] int *pVal);
+		[id(7), helpstring("method ResumeTransfer")] HRESULT ResumeTransfer();
+		[propget, id(8), helpstring("property StatusString")] HRESULT StatusString([out, retval] BSTR *pVal);
+		[id(9), helpstring("method UploadFile")] HRESULT UploadFile([in] long hSocket);
+		[propget, id(10), helpstring("property TransferType")] HRESULT TransferType([out, retval] EnumTransferType *pVal);
+		[propget, id(11), helpstring("property LocalTargetFile")] HRESULT LocalTargetFile([out, retval] BSTR *pVal);
+		[propput, id(11), helpstring("property LocalTargetFile")] HRESULT LocalTargetFile([in] BSTR newVal);
+		[propget, id(12), helpstring("property RemoteFileSize")] HRESULT RemoteFileSize([out, retval] double *pVal);
+		[propput, id(12), helpstring("property RemoteFileSize")] HRESULT RemoteFileSize([in] double newVal);
+		[id(13), helpstring("method UploadFileAlt")] HRESULT UploadFileAlt([in] BSTR Address, [in] long nPort, [in] BSTR MyNick, [in] BSTR LocalFilename);
+		[propget, id(14), helpstring("property TransferState")] HRESULT TransferState([out, retval] EnumTransferState *pVal);
+		[propget, id(15), helpstring("property ReadyToUnload")] HRESULT ReadyToUnload([out, retval] VARIANT_BOOL *pVal);
+	};
+
+	[
+		uuid(DEBCADA9-0AA6-44EE-9D6F-46A96388DDDE),
+		helpstring("Listener Class")
+	]
+	coclass Listener
+	{
+		[default] interface IListener;
+		[default, source] dispinterface _IListenerEvents;
+	};
+	[
+		uuid(60F360A1-7B1E-4CE7-B5D5-486D9FCAED03),
+		helpstring("_ITransferEvents Interface")
+	]
+	dispinterface _ITransferEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method OnError")] HRESULT OnError([in] EnumErrorState Error, [in] BSTR Description);
+		[id(2), helpstring("method OnTransferComplete")] HRESULT OnTransferComplete();
+		[id(3), helpstring("method OnNegotiationComplete")] HRESULT OnNegotiationComplete([in] BSTR Filename, [in] BSTR Nick, [in] double Offset);
+		[id(4), helpstring("method FatalError")] HRESULT FatalError([in] BSTR Message);
+		[id(5), helpstring("method NeedTransferReRequest")] HRESULT NeedTransferReRequest();
+	};
+	
+
+	[
+		uuid(F5D5BC22-E2EC-423B-B7EC-D9F6A64BC84A),
+		helpstring("Transfer Class")
+	]
+	coclass Transfer
+	{
+		[default] interface ITransfer;
+		[default, source] dispinterface _ITransferEvents;
+	};
+	
+
+	[
+		object,
+		uuid(3BF90A90-52E1-4C97-BC85-3C00B08EB1FE),
+		dual,
+		helpstring("ILogin Interface"),
+		pointer_default(unique)
+	]
+	interface ILogin : IDispatch
+	{
+		[id(1), helpstring("method SetLoginInfo")] HRESULT SetLoginInfo([in] BSTR MyNick, [in] BSTR PasswordEncrypted, [in] BSTR EMailAddr, [in] long  nPort,  [in] long nSpeed);
+		[id(2), helpstring("method OnMessage")] HRESULT OnMessage([in] int iCmd, [in] BSTR sData);
+		[id(3), helpstring("method Login")] HRESULT Login([in] BSTR sServerName);
+		[propget, id(7), helpstring("property LoginNick")] HRESULT LoginNick([out, retval] BSTR *pVal);
+		[id(8), helpstring("method EncryptString")] HRESULT EncryptString([in] BSTR sText, [out, retval] BSTR * pResult);
+		[id(9), helpstring("method Destroy")] HRESULT Destroy();
+		[id(10), helpstring("method Init")] HRESULT Init();
+		[propget, id(11), helpstring("property Directory")] HRESULT Directory([out, retval] BSTR *pVal);
+		[propput, id(11), helpstring("property Directory")] HRESULT Directory([in] BSTR newVal);
+	};
+
+	[
+		uuid(C1EB241F-EF0E-42DB-9DD5-1A970744C14D),
+		helpstring("_ILoginEvents Interface")
+	]
+	dispinterface _ILoginEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method LoginComplete")] HRESULT LoginComplete([in] VARIANT_BOOL Succeeded);
+		[id(2), helpstring("method SendToServer")] HRESULT SendToServer([in] int iCmd, [in] BSTR sData);
+		[id(3), helpstring("method LoginError")] HRESULT LoginError([in] BSTR ErrorMessage);
+		[id(4), helpstring("method FatalError")] HRESULT FatalError([in] BSTR Message);
+	};
+
+	[
+		uuid(20142D08-4568-440C-8BE9-63D2F13BF347),
+		helpstring("Login Class")
+	]
+	coclass Login
+	{
+		[default] interface ILogin;
+		[default, source] dispinterface _ILoginEvents;
+	};
+};

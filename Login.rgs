@@ -1,0 +1,34 @@
+HKCR
+{
+	P2P.Login.1 = s 'Login Class'
+	{
+		CLSID = s '{20142D08-4568-440C-8BE9-63D2F13BF347}'
+	}
+	P2P.Login = s 'Login Class'
+	{
+		CLSID = s '{20142D08-4568-440C-8BE9-63D2F13BF347}'
+		CurVer = s 'P2P.Login.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {20142D08-4568-440C-8BE9-63D2F13BF347} = s 'Login Class'
+		{
+			ProgID = s 'P2P.Login.1'
+			VersionIndependentProgID = s 'P2P.Login'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 118'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '132497'
+			}
+			'TypeLib' = s '{38E1207E-A822-4AB2-9000-3DB64ED771BB}'
+			'Version' = s '1.0'
+		}
+	}
+}

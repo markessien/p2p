@@ -1,0 +1,172 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// German (Germany) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+#ifdef _WIN32
+LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "1 TYPELIB ""P2P.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "P2P Module\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "P2P\0"
+            VALUE "LegalCopyright", "Copyright 2002\0"
+            VALUE "OriginalFilename", "P2P.DLL\0"
+            VALUE "ProductName", "P2P Module\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "OLESelfRegister", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_NAPSTER_SERVER      BITMAP  DISCARDABLE     "res\\napster_.bmp"
+IDB_SERVER_MANAGER      BITMAP  DISCARDABLE     "res\\server_m.bmp"
+IDB_SHAREDFOLDERMANAGER BITMAP  DISCARDABLE     "res\\sharedfo.bmp"
+IDB_LISTENER            BITMAP  DISCARDABLE     "res\\listener.bmp"
+IDB_TRANSFER            BITMAP  DISCARDABLE     "res\\transfer.bmp"
+IDB_LOGIN               BITMAP  DISCARDABLE     "res\\login.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_NAPSTERSERVER       REGISTRY DISCARDABLE    "NapsterServer.rgs"
+IDR_SERVERMANAGER       REGISTRY DISCARDABLE    "ServerManager.rgs"
+IDR_SHAREDFOLDERMANAGER REGISTRY DISCARDABLE    "SharedFolderManager.rgs"
+IDR_LISTENER            REGISTRY DISCARDABLE    "Listener.rgs"
+IDR_TRANSFER            REGISTRY DISCARDABLE    "Transfer.rgs"
+IDR_LOGIN               REGISTRY DISCARDABLE    "Login.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_NAPSTER_TRANSFER    ICON    DISCARDABLE     "res\\icon2.ico"
+IDI_SERVER_MANAGER      ICON    DISCARDABLE     "res\\icon1.ico"
+IDI_NAPSTER_SERVER      ICON    DISCARDABLE     "res\\ico00001.ico"
+IDI_SHAREDFOLDER_MANAGER ICON    DISCARDABLE     "res\\ico00002.ico"
+IDI_SEARCH              ICON    DISCARDABLE     "res\\search.ico"
+IDI_LISTENER            ICON    DISCARDABLE     "res\\ico00004.ico"
+IDI_LOGIN               ICON    DISCARDABLE     "res\\ico00003.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PROGRESSDIALOG DIALOG DISCARDABLE  0, 0, 220, 63
+STYLE DS_SYSMODAL | DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Scanning Folder..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Cancel",2,64,36,96,19
+    LTEXT           "Initializing",IDC_CAPTION,7,6,209,20
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PROJNAME            "P2P"
+END
+
+#endif    // German (Germany) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "P2P.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

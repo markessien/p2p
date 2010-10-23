@@ -1,0 +1,34 @@
+HKCR
+{
+	P2P.NapsterDownload.1 = s 'NapsterDownload Class'
+	{
+		CLSID = s '{0CC886AD-13A5-42CA-B56B-DC3DEEB5EE22}'
+	}
+	P2P.NapsterDownload = s 'NapsterDownload Class'
+	{
+		CLSID = s '{0CC886AD-13A5-42CA-B56B-DC3DEEB5EE22}'
+		CurVer = s 'P2P.NapsterDownload.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0CC886AD-13A5-42CA-B56B-DC3DEEB5EE22} = s 'NapsterDownload Class'
+		{
+			ProgID = s 'P2P.NapsterDownload.1'
+			VersionIndependentProgID = s 'P2P.NapsterDownload'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 105'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '132497'
+			}
+			'TypeLib' = s '{38E1207E-A822-4AB2-9000-3DB64ED771BB}'
+			'Version' = s '1.0'
+		}
+	}
+}

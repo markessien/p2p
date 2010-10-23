@@ -1,0 +1,34 @@
+HKCR
+{
+	P2P.ServerManager.1 = s 'ServerManager Class'
+	{
+		CLSID = s '{72076840-292C-40AD-B194-EC75DB11981C}'
+	}
+	P2P.ServerManager = s 'ServerManager Class'
+	{
+		CLSID = s '{72076840-292C-40AD-B194-EC75DB11981C}'
+		CurVer = s 'P2P.ServerManager.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {72076840-292C-40AD-B194-EC75DB11981C} = s 'ServerManager Class'
+		{
+			ProgID = s 'P2P.ServerManager.1'
+			VersionIndependentProgID = s 'P2P.ServerManager'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 103'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '132497'
+			}
+			'TypeLib' = s '{38E1207E-A822-4AB2-9000-3DB64ED771BB}'
+			'Version' = s '1.0'
+		}
+	}
+}

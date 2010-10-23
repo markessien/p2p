@@ -1,0 +1,34 @@
+HKCR
+{
+	P2P.Transfer.1 = s 'Transfer Class'
+	{
+		CLSID = s '{F5D5BC22-E2EC-423B-B7EC-D9F6A64BC84A}'
+	}
+	P2P.Transfer = s 'Transfer Class'
+	{
+		CLSID = s '{F5D5BC22-E2EC-423B-B7EC-D9F6A64BC84A}'
+		CurVer = s 'P2P.Transfer.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F5D5BC22-E2EC-423B-B7EC-D9F6A64BC84A} = s 'Transfer Class'
+		{
+			ProgID = s 'P2P.Transfer.1'
+			VersionIndependentProgID = s 'P2P.Transfer'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 114'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '132497'
+			}
+			'TypeLib' = s '{38E1207E-A822-4AB2-9000-3DB64ED771BB}'
+			'Version' = s '1.0'
+		}
+	}
+}
